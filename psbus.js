@@ -18,7 +18,7 @@ const createDataProxy = (data, x) =>
       },
   })
 
-const psbus = () => {
+export const psbus = () => {
     const x = {
       events: {}, //for possible events in future
       func: {},
@@ -58,4 +58,4 @@ const psbus = () => {
     }
 
     return x
-}
+  }
