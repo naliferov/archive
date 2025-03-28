@@ -38,3 +38,29 @@ x.s('set', async (x) => {
       //return x.p('fs', { del: { path } })
     }
   })
+
+
+//frontend
+
+x.s('server.send', async (x) => {
+  const bin = x?.data?.bin
+  const headers = { 'content-type': 'application/json' }
+  if (bin) {
+    headers['content-type'] = 'application/octet-stream'
+    headers['bin-meta'] = JSON.stringify(x.data.binMeta)
+  }
+  const r = await fetch('/', {
+    method: 'POST',
+    headers,
+    body: bin || JSON.stringify(x),
+  })
+  return r.json()
+})
+x.s('set', async (x) => {
+    if (x.repo === 'idb') return await idb.set(x)
+    return await x.p('server.send', { event: 'set', data: x })
+})
+x.s('get', async (x) => {
+    if (x.repo === 'idb') return await idb.get(x)
+    return await x.p('server.send', { event: 'get', data: x })
+})
